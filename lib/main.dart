@@ -9,15 +9,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
-      create: (ctx) => CounterCubit(),
-      child: MaterialApp(
-        title: 'Bloc Access',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const HomePage(),
+    return MaterialApp(
+      title: 'Bloc Access',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const HomePage(),
     );
   }
 }
@@ -27,29 +24,34 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BlocSelector<CounterCubit, CounterState, int>(
-              selector: (state) => state.counter,
-              builder: (ctx, counter) => Text(
-                '$counter',
-                style: const TextStyle(
-                  fontSize: 52,
+    return BlocProvider(
+      create: (ctx) => CounterCubit(),
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              BlocSelector<CounterCubit, CounterState, int>(
+                selector: (state) => state.counter,
+                builder: (ctx, counter) => Text(
+                  '$counter',
+                  style: const TextStyle(
+                    fontSize: 52,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 15),
-            ElevatedButton(
-              onPressed: () => context.read<CounterCubit>().incrementCounter(),
-              child: const Text(
-                'Increment',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ],
+              const SizedBox(height: 15),
+              Builder(builder: (ctx) {
+                return ElevatedButton(
+                  onPressed: () => ctx.read<CounterCubit>().incrementCounter(),
+                  child: const Text(
+                    'Increment',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
