@@ -5,26 +5,48 @@ import 'show_me_counter_page.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final CounterCubit _counterCubit;
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
-      create: (ctx) => CounterCubit(),
-      child: MaterialApp(
-        title: 'Bloc Access: Generated Route Access',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: Colors.grey,
-        ),
-        routes: {
-          HomePage.id: (ctx) => const HomePage(),
-          ShowMeCounterPage.id: (ctx) => const ShowMeCounterPage(),
-        },
+    return MaterialApp(
+      title: 'Bloc Access: Generated Route Access',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey,
       ),
+      routes: {
+        HomePage.id: (ctx) => BlocProvider<CounterCubit>.value(
+              value: _counterCubit,
+              child: const HomePage(),
+            ),
+        ShowMeCounterPage.id: (ctx) => BlocProvider<CounterCubit>.value(
+              value: _counterCubit,
+              child: const ShowMeCounterPage(),
+            ),
+      },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _counterCubit = CounterCubit();
+  }
+
+  @override
+  void dispose() {
+    _counterCubit.close();
+    super.dispose();
   }
 }
 
