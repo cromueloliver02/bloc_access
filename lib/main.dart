@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bloc Access',
+      title: 'Bloc Access: Context',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
