@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/counter/counter_cubit.dart';
+import 'show_me_counter_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,12 +10,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
+    return BlocProvider(
       create: (ctx) => CounterCubit(),
       child: MaterialApp(
-        title: 'Bloc Access',
+        title: 'Bloc Access: Anonymous Route Access',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.grey,
         ),
         home: const HomePage(),
       ),
@@ -32,13 +35,19 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BlocSelector<CounterCubit, CounterState, int>(
-              selector: (state) => state.counter,
-              builder: (ctx, counter) => Text(
-                '$counter',
-                style: const TextStyle(
-                  fontSize: 52,
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => BlocProvider.value(
+                    value: ctx.read<CounterCubit>(),
+                    child: const ShowMeCounterPage(),
+                  ),
                 ),
+              ),
+              child: const Text(
+                'Show Me Counter',
+                style: TextStyle(fontSize: 18),
               ),
             ),
             const SizedBox(height: 15),
